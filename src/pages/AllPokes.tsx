@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Card from '../components/Card';
 import style from './AllPokes.module.css' 
 import axios from 'axios';
-import { IonCol, IonContent, IonGrid, IonInfiniteScroll, IonInfiniteScrollContent, IonRow } from '@ionic/react';
+import { IonCol, IonContent, IonGrid, IonInfiniteScroll, IonInfiniteScrollContent, IonRefresher, IonRefresherContent, IonRow } from '@ionic/react';
 
 
 
@@ -20,7 +20,7 @@ interface Pokemon {
 function AllPokes() {
   const [pokemonData, setPokemonData] = useState<any[]>([]);
 
-  useEffect(() => {
+ 
     const fetchData = async () => {
       try {
         const apiurl1 = await axios.get("https://pokeapi.co/api/v2/pokemon");
@@ -54,17 +54,33 @@ function AllPokes() {
         console.error('Error fetching data:', error);
       }
     };
+    
 
+  useEffect(() => {
     fetchData();
   }, []);
 
+  const loadMoreData = async (event: CustomEvent<void>) => {
+    await fetchData(); // Vuelve a cargar los datos desde la API
+    (event.target as HTMLIonInfiniteScrollElement).complete(); // Marca el evento como completado
+  };
+
+  const handleRefresh = (event: CustomEvent) => {
+    fetchData();
+
+    setTimeout(() => {
+      event.detail.complete();
+    }, 1000);
+    (event.target as HTMLIonInfiniteScrollElement).complete();
+  };
 
   console.log(pokemonData)
 
     return(
 
      
-      <IonContent  >
+      <IonContent>
+      
         <div className={style.padre}>
        <IonGrid className={style.con}>
         <IonRow>
@@ -74,7 +90,7 @@ function AllPokes() {
               <IonCol size="12" size-md="6" size-lg="2" key={p.id}>
 
                 <Card id={p.id} name={p.name} experience={p.experience} height={p.height} weight={p.weight}
-                  img={p.img} ability={p.img}                
+                  img={p.img} ability={p.ability}                
                 />
                 </IonCol>
               
@@ -89,9 +105,9 @@ function AllPokes() {
    
 
         <IonInfiniteScroll
-          onIonInfinite={(ev) => {
-          setTimeout(() => ev.target.complete(), 500);
-           }}
+            threshold="100px"
+            onIonInfinite={loadMoreData}
+            disabled={false} // Set to true if there are no more items to load
           >
         <IonInfiniteScrollContent></IonInfiniteScrollContent>
       </IonInfiniteScroll>
@@ -103,3 +119,4 @@ function AllPokes() {
 
 
 export default AllPokes;
+

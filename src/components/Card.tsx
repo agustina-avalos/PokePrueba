@@ -13,6 +13,9 @@ interface Pokemon {
   ability: string[];
 }
 
+
+
+
 function Card({ id, name, experience,height,weight,img,ability} : Pokemon ) {
   return (
     <IonCard className={style.containerCard}>
@@ -28,9 +31,18 @@ function Card({ id, name, experience,height,weight,img,ability} : Pokemon ) {
         <IonItem>
           <IonLabel>weight: {weight}</IonLabel>
         </IonItem>
+        
         <IonItem>
-          <IonLabel>The Legend of Zelda</IonLabel>
+          <IonLabel>Abilities:</IonLabel>
+          <IonLabel>
+            <ul>
+              {ability.map((a) => (
+                <li >{a}</li>
+              ))}
+            </ul>
+          </IonLabel>
         </IonItem>
+      
       </IonCardHeader>
 
     </IonCard>
