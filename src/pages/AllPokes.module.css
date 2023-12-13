@@ -1,0 +1,20 @@
+.padre{
+  background-color: rgba(175, 54, 54, 0.849);
+  background-size: cover;
+  background-attachment: fixed;
+  margin-top: -80px;
+ 
+  height: auto;
+  width: auto;
+  margin-bottom: -120px;
+}
+
+
+.con{
+ 
+ margin-top: 80px;
+ margin-left: 50px;
+  margin-right: 50px;
+
+}
+
