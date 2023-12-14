@@ -1,0 +1,37 @@
+.padre{
+  background-color: rgba(139, 175, 72, 0.849);
+  margin-top: -30px;
+ 
+  
+  margin-bottom: -120px;
+}
+
+
+.con{
+ 
+ margin-top: 80px;
+ margin-left: 50px;
+margin-right: 50px;
+margin-bottom: 10px;
+
+}
+
+.abili{
+  position: absolute;
+  top: 0;
+  left: 50%; /* Para centrar horizontalmente, opcional */
+  transform: translateX(-50%);
+}
+
+
+.titleCont{
+  text-align: center;
+  color: rgb(7, 53, 43);
+  display: flex;
+  align-items: center; 
+  justify-content: center; 
+  margin-top: 30px;
+  height: 150px;
+  font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+ font-size: 200px;
+}

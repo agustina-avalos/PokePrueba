@@ -6,11 +6,12 @@
     padding-right: 15px;
     margin-left: 10px;
     opacity: 2;
-    background-color: rgba(218, 217, 210, 0.741);
+    background-color: rgba(249, 237, 107, 0.697);
     color: black;
     display: flex;
     flex-direction: column;
     text-decoration: none;
+    border-radius: 5%;
 } 
 
 .name {
@@ -25,4 +26,8 @@
     width: 80px; 
     height: 80px
 
+  }
+
+  .itemCon{
+    background-color: aquamarine;
   }

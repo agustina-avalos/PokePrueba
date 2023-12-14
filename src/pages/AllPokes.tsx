@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Card from '../components/Card';
-import style from './AllPokes.module.css' 
+import style from './css/AllPokes.module.css' 
 import axios from 'axios';
 import { IonCol, IonContent, IonGrid, IonInfiniteScroll, IonInfiniteScrollContent, IonRefresher, IonRefresherContent, IonRow } from '@ionic/react';
-
+import ImagenPoke from '../components/ImagenPoke';
 
 
 
@@ -15,10 +15,13 @@ interface Pokemon {
   weight: number;
   img: string;
   ability: string[];
+  onClick: () => void;
 }
 
 function AllPokes() {
   const [pokemonData, setPokemonData] = useState<any[]>([]);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedImageUrl, setSelectedImageUrl] = useState("")
 
  
     const fetchData = async () => {
@@ -27,12 +30,11 @@ function AllPokes() {
         const apiurl2 = await axios.get(apiurl1.data.next);
         const apiurl3 = await axios.get(apiurl2.data.next);
         const apiurl4 = await axios.get(apiurl3.data.next);
+        const apiurl5= await axios.get(apiurl4.data.next);
 
+        const [res1, res2, res3, res4, res5] = await Promise.all([apiurl1, apiurl2, apiurl3, apiurl4, apiurl5]);
 
-
-        const [res1, res2, res3, res4] = await Promise.all([apiurl1, apiurl2, apiurl3, apiurl4]);
-
-        const allpoke = res1.data.results.concat(res2.data.results).concat(res3.data.results).concat(res4.data.results);
+        const allpoke = res1.data.results.concat(res2.data.results).concat(res3.data.results).concat(res4.data.results).concat(res5.data.results);
       
         const apiInfo = await Promise.all(
           allpoke.map(async (e: { url: string; }) => {
@@ -56,63 +58,63 @@ function AllPokes() {
     };
     
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+      useEffect(() => {
+        fetchData();
+      }, []);
 
-  const loadMoreData = async (event: CustomEvent<void>) => {
-    await fetchData(); // Vuelve a cargar los datos desde la API
-    (event.target as HTMLIonInfiniteScrollElement).complete(); // Marca el evento como completado
+
+    const loadMoreData = async (event: CustomEvent<void>) => {
+      await fetchData(); 
+      (event.target as HTMLIonInfiniteScrollElement).complete(); // Marca el evento como completado
+    };
+
+ 
+
+
+  const handleCardClick = (imageUrl: string) => {
+    setSelectedImageUrl(imageUrl);
+    setPopupOpen(true);
   };
 
-  const handleRefresh = (event: CustomEvent) => {
-    fetchData();
 
-    setTimeout(() => {
-      event.detail.complete();
-    }, 1000);
-    (event.target as HTMLIonInfiniteScrollElement).complete();
-  };
-
-  console.log(pokemonData)
+    console.log(pokemonData)
 
     return(
-
-     
       <IonContent>
-      
         <div className={style.padre}>
-       <IonGrid className={style.con}>
-        <IonRow>
-          {
-            
-            pokemonData.map(p=>(
-              <IonCol size="12" size-md="6" size-lg="2" key={p.id}>
 
-                <Card id={p.id} name={p.name} experience={p.experience} height={p.height} weight={p.weight}
-                  img={p.img} ability={p.ability}                
-                />
-                </IonCol>
-              
-            
-            ))
-          
-          }
-          </IonRow>
+        <div className={style.titleCont}>
+          <h1>¡Welcome Pokefriend!</h1>
+        </div>
+
+          <IonGrid className={style.con}>
+            <IonRow>
+              {
+                pokemonData.map(p=>(
+                  <IonCol size="12" size-md="6" size-lg="2" key={p.id}>
+
+                    <Card id={p.id} name={p.name} experience={p.experience} height={p.height} weight={p.weight}
+                      img={p.img} ability={p.ability}
+                      onClick={() => handleCardClick(p.img)}                
+                    />
+                    </IonCol> 
+                
+                ))
+              }
+            </IonRow>
           </IonGrid>
-          </div>
-
-   
+        </div>
 
         <IonInfiniteScroll
             threshold="100px"
             onIonInfinite={loadMoreData}
-            disabled={false} // Set to true if there are no more items to load
+            disabled={false}
           >
-        <IonInfiniteScrollContent></IonInfiniteScrollContent>
-      </IonInfiniteScroll>
-      
-        </IonContent>
+          <IonInfiniteScrollContent></IonInfiniteScrollContent>
+        </IonInfiniteScroll>
+
+        <ImagenPoke  key={selectedImageUrl} isOpen={popupOpen} imageUrl={selectedImageUrl} onClose={() => setPopupOpen(false)} />
+      </IonContent>
  
     )
 }

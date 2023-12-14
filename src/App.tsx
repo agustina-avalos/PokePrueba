@@ -20,6 +20,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import AllPokes from './pages/AllPokes';
+import Landig from './pages/Landig';
 
 setupIonicReact();
 
@@ -27,6 +28,7 @@ const App: React.FC = () => (
   <IonApp  style={{ backgroundImage: 'url("https://i.pinimg.com/originals/15/96/22/159622a771fb21eeb0d01a255115968a.jpg")', backgroundSize: 'cover'}}>
     <IonReactRouter>
       <IonRouterOutlet placeholder={undefined}>
+        <Route exact path="/"> <Landig/> </Route>
         <Route exact path="/home"> <AllPokes/> </Route>
       </IonRouterOutlet>
     </IonReactRouter>
